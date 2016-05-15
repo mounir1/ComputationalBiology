@@ -8,11 +8,10 @@ import java.util.*;
    Date: on 13.05.2016.
 
 
-
+---------KmeansClustering--------
 This class is the entry point for constructing Cluster Analysis objects.
 Each instance of KmeansClustering object is associated with one or more clusters,
-and a Vector of DataPoint objects. The KmeansClustering and DataPoint classes are
-the only classes available from other packages.
+and a Vector of DataPoint objects.
 @see DataPoint
 
 **/
@@ -24,7 +23,7 @@ public class KmeansClustering {
     private double mSWCSS;
 
     public KmeansClustering(int k, int iter, Vector dataPoints) {  // k number of clusters
-        clusters = new Cluster[k];                      // iter number of data
+        clusters = new Cluster[k];
         for (int i = 0; i < k; i++) {
             clusters[i] = new Cluster("Cluster" + i);
         }
@@ -86,7 +85,7 @@ public class KmeansClustering {
                             tempCluster = clusters[l];
                             matchFoundFlag = true;
                         }
-                        //if statement - Check whether the Last EuDt is > Present EuDt 
+                        //if statement - Check whether the Last EuDt is > Present EuDt
 
                     }
 //for variable 'l' - Looping between different Clusters for matching a Data Point.
@@ -261,7 +260,7 @@ class Cluster {
         return this.mSumSqr;
     }
 
-    public String getName() {
+    public String getName() { // no need for this one
         return this.mName;
     }
 
@@ -414,7 +413,7 @@ class PrgMain {
 
     public static void main(String args[]) {
 
-        System.out.println("To input a data points type '1' ,to generate Random Gaussian points type '0':");
+        System.out.println("To input a data points from a file type '1' ,to generate Random Gaussian points type '0':");
 
         int choice = in.nextInt();
         while (choice != 0 && choice != 1) {
@@ -423,18 +422,19 @@ class PrgMain {
         }
         if (choice == 1)
             file();
-        else
-            gaussian();
-        run();
+        run(choice);
     }
 
-    private static void run() {
+    private static void run(int choice) {
+
         System.out.println("Enter the Number Of Clusters :");
         int k = in.nextInt();
+        if (choice == 0)
+            gaussian(k);
         KmeansClustering jca = new KmeansClustering(k, 1000, dataPoints);
         jca.startAnalysis();
         Vector[] v = jca.getClusterOutput();
-        int line = 0;
+        int line = 1;
         for (int i = 0; i < v.length; i++) {
             Vector tempV = v[i];
             System.out.println("-----------Cluster" + i + "---------");
@@ -446,18 +446,26 @@ class PrgMain {
         }
     }
 
-    private static void gaussian() {
-        System.out.println("Enter the Mean of the Gaussian :");
-        double mean = in.nextDouble();
-        System.out.println("Enter the Variance of the Gaussian :");
-        double variance = in.nextDouble();
+    private static void gaussian(int k) {
+        double mean = 0;
+        double variance = 0;
+
+        for (int i = 1; i <= k; i++) {
+            System.out.println("Enter the Mean of the Gaussian " + i + " :");
+            mean = in.nextDouble();
+            System.out.println("Enter the Variance of the Gaussian " + i + " :");
+            variance = in.nextDouble();
+        }
         System.out.println("Enter number of points n to be generated  :");
         int n = in.nextInt();
-        RandomGaussian gaussian = new RandomGaussian();
-        for (int i = 0; i <n ; i++) {
-            dataPoints.add(new DataPoint(gaussian.getGaussian(mean,variance), gaussian.getGaussian(mean,variance)));
+        for (int j = 0; j < k; j++) {
+            RandomGaussian gaussian = new RandomGaussian();
+            for (int s = 0; s < n; s++) {
+                dataPoints.add(new DataPoint(gaussian.getGaussian(mean, variance), gaussian.getGaussian(mean, variance)));
+            }
         }
     }
+
 
     private static void file() {
         System.out.println("Enter the path of the file :");
@@ -505,6 +513,7 @@ class PrgMain {
             return aMean + fRandom.nextGaussian() * aVariance;
         }
 
+        //Clustering with K-Means takes place iteratively and involves two steps: 1) assignment of data samples to clusters on the basis of how far the data samples are from the cluster centers; and 2) Recalculation of the cluster centers
         private void log(Object aMsg) {
             System.out.println(String.valueOf(aMsg));
         }
