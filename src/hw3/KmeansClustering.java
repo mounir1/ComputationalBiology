@@ -479,13 +479,21 @@ class PrgMain {
         try {
             FileReader file1 = new FileReader(FilePath);
             Scanner file = new Scanner(file1);
-            System.out.println("file");
+            int i = 1;
             while (file.hasNextLine()) {
+                i++;
                 line = file.nextLine();
-                int space = line.indexOf(" ");
-                String x = line.substring(0, space).trim();
-                String y = line.substring(space, line.length()).trim();
-                dataPoints.add(new DataPoint(Double.parseDouble(x), Double.parseDouble(y)));
+                try {
+                    int space = line.indexOf(" ");
+                    String x = line.substring(0, space).trim();
+                    String y = line.substring(space, line.length()).trim();
+                    dataPoints.add(new DataPoint(Double.parseDouble(x), Double.parseDouble(y)));
+                } catch
+                        (Exception e) {
+                    System.out.println("The Format of the file should be the same as input.txt space between x and y");
+                    System.out.print("fix the input at line " + i);
+                }
+
             }
             file.close();
         } catch (Exception e) {
@@ -513,7 +521,6 @@ class PrgMain {
             return aMean + fRandom.nextGaussian() * aVariance;
         }
 
-        //Clustering with K-Means takes place iteratively and involves two steps: 1) assignment of data samples to clusters on the basis of how far the data samples are from the cluster centers; and 2) Recalculation of the cluster centers
         private void log(Object aMsg) {
             System.out.println(String.valueOf(aMsg));
         }
