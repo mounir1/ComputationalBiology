@@ -1,5 +1,7 @@
 package hw3;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.util.*;
@@ -423,6 +425,15 @@ class PrgMain {
         if (choice == 1)
             file();
         run(choice);
+        System.out.println("type Plot to plot : ");
+        String plot = in.next();
+        if (plot.toLowerCase() == "plot") {
+            plot();
+        }
+    }
+
+    private static void plot() {
+        Plot plot = new Plot();
     }
 
     private static void run(int choice) {
@@ -466,7 +477,6 @@ class PrgMain {
         }
     }
 
-
     private static void file() {
         System.out.println("Enter the path of the file :");
         String FilePath = in.next();
@@ -490,8 +500,7 @@ class PrgMain {
                     dataPoints.add(new DataPoint(Double.parseDouble(x), Double.parseDouble(y)));
                 } catch
                         (Exception e) {
-                    System.out.println("The Format of the file should be the same as input.txt space between x and y");
-                    System.out.print("fix the input at line " + i);
+                    System.out.println("The Format of the file should be the same as input.txt space between x and y fix the input at line " + i);
                 }
 
             }
@@ -525,4 +534,27 @@ class PrgMain {
             System.out.println(String.valueOf(aMsg));
         }
     }
+
+    static class Plot extends JFrame {
+        public Plot() {
+            setSize(400, 400);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            panel p = new panel();
+            setContentPane(p);
+        }
+
+        private class panel extends JPanel {
+            public panel() {
+
+            }
+
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setColor(Color.RED);
+                g2.fillOval(10, 10, 40, 40);
+            }
+        }
+    }
+
 }
